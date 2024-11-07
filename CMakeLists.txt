@@ -10,4 +10,5 @@ add_executable(labVika main.cpp
         Trip.h
         BusTrip.cpp
         BusTrip.h
+        Vechile.h
 )
