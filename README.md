@@ -5,7 +5,7 @@ Repository and Code Quality
 
 Project Repository: https://github.com/korobocheck/NewBusSchedule
 
-SonarCloud Code Quality: https://sonarcloud.io/summary/new_code?id=korobocheck_BusSchedule
+SonarCloud Code Quality: https://sonarcloud.io/summary/overall?id=korobocheck_NewBusSchedule
 
     
 **Bus Schedules** is a command-line interface (CLI) program that allows users to manage bus schedules using dynamic memory allocation. This system supports basic CRUD operations and validates input fields like the bus number.
