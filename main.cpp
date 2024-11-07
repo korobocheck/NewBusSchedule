@@ -1,6 +1,7 @@
 #include "schedule.h"
 #include <iostream>
-#include "windows.h"
+#include <string>
+#include <windows.h>
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
@@ -8,7 +9,7 @@ int main() {
     int choice;
 
     do {
-        std::cout << "\n1. Добавить рейс\n2. Показать рейсы\n3. Обновить рейс\n4. Удалить рейс\n5. Рассчитать свободные промежутки\n0. Выход\n";
+        std::cout << "\n1. Добавить рейс\n2. Показать рейсы\n3. Обновить рейс\n4. Удалить рейс\n5. Рассчитать свободные промежутки\n6. Сравнить рейсы\n0. Выход\n";
         std::cout << "Введите ваш выбор: ";
         std::cin >> choice;
 
@@ -46,6 +47,23 @@ int main() {
             schedule.deleteTrip(index);
         } else if (choice == 5) {
             schedule.calculateFreeIntervals();
+        } else if (choice == 6) {
+            int index1, index2;
+            std::cout << "Введите индексы двух рейсов для сравнения: ";
+            std::cin >> index1 >> index2;
+            const auto* trip1 = schedule.getTrip(index1);
+            const auto* trip2 = schedule.getTrip(index2);
+            if (trip1 && trip2) {
+                if (*trip1 == *trip2) {
+                    std::cout << "Рейсы идентичны." << std::endl;
+                } else if (*trip1 < *trip2) {
+                    std::cout << "Первый рейс отправляется раньше второго." << std::endl;
+                } else if (*trip1 > *trip2) {
+                    std::cout << "Первый рейс отправляется позже второго." << std::endl;
+                }
+            } else {
+                std::cerr << "Неверные индексы!" << std::endl;
+            }
         }
 
     } while (choice != 0);
