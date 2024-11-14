@@ -1,10 +1,8 @@
 #include "schedule.h"
 #include <iostream>
 #include <string>
-#include <windows.h>
 
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
     Schedule schedule;
     int choice;
 

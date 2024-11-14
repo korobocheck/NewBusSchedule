@@ -1,16 +1,17 @@
-#include "schedule.h"
+#include "Schedule.h"
 #include <iostream>
 #include <algorithm>
+#include <string_view>
 
-int timeToMinutes(const std::string& time) {
-    int hours = std::stoi(time.substr(0, 2));
-    int minutes = std::stoi(time.substr(3, 2));
+int timeToMinutes(std::string_view time) {
+    int hours = std::stoi(std::string(time.substr(0, 2)));
+    int minutes = std::stoi(std::string(time.substr(3, 2)));
     return hours * 60 + minutes;
 }
 
-void Schedule::addTrip(const std::string& route, const std::string& date, const std::string& departureTime, const std::string& arrivalTime) {
-    BusTrip* newTrip = new BusTrip(route, date, departureTime, arrivalTime);
-    trips.push_back(newTrip);
+void Schedule::addTrip(std::string_view route, std::string_view date, std::string_view departureTime, std::string_view arrivalTime) {
+    auto newTrip = std::make_unique<BusTrip>(route, date, departureTime, arrivalTime);
+    trips.push_back(std::move(newTrip));
     std::cout << "Рейс добавлен: " << route << " на " << date << " с отправлением в " << departureTime << " и прибытием в " << arrivalTime << std::endl;
 }
 
@@ -24,24 +25,23 @@ void Schedule::listTrips() const {
     }
 }
 
-void Schedule::updateTrip(int index, const std::string& newRoute, const std::string& newDate, const std::string& newDepartureTime, const std::string& newArrivalTime) {
-    if (index < 0 || index >= trips.size()) {
+void Schedule::updateTrip(int index, std::string_view newRoute, std::string_view newDate, std::string_view newDepartureTime, std::string_view newArrivalTime) {
+    if (index < 0 || index >= static_cast<int>(trips.size())) {
         std::cerr << "Неверный индекс!" << std::endl;
         return;
     }
-    trips[index]->setRoute(newRoute);
-    trips[index]->setDate(newDate);
-    trips[index]->setDepartureTime(newDepartureTime);
-    trips[index]->setArrivalTime(newArrivalTime);
+    trips[index]->setRoute(std::string(newRoute));
+    trips[index]->setDate(std::string(newDate));
+    trips[index]->setDepartureTime(std::string(newDepartureTime));
+    trips[index]->setArrivalTime(std::string(newArrivalTime));
     std::cout << "Рейс обновлен: " << newRoute << " на " << newDate << " с отправлением в " << newDepartureTime << " и прибытием в " << newArrivalTime << std::endl;
 }
 
 void Schedule::deleteTrip(int index) {
-    if (index < 0 || index >= trips.size()) {
+    if (index < 0 || index >= static_cast<int>(trips.size())) {
         std::cerr << "Неверный индекс!" << std::endl;
         return;
     }
-    delete trips[index];
     trips.erase(trips.begin() + index);
     std::cout << "Рейс удален." << std::endl;
 }
@@ -52,8 +52,12 @@ void Schedule::calculateFreeIntervals() const {
         return;
     }
 
-    std::vector<const BusTrip*> sortedTrips(trips.begin(), trips.end());
-    std::sort(sortedTrips.begin(), sortedTrips.end(), [](const BusTrip* a, const BusTrip* b) {
+    std::vector<const BusTrip*> sortedTrips;
+    for (const auto& trip : trips) {
+        sortedTrips.push_back(trip.get());
+    }
+
+    std::sort(sortedTrips.begin(), sortedTrips.end(), [](const auto& a, const auto& b) {
         return a->getDepartureTime() < b->getDepartureTime();
     });
 
@@ -72,14 +76,8 @@ void Schedule::calculateFreeIntervals() const {
 }
 
 const BusTrip* Schedule::getTrip(int index) const {
-    if (index < 0 || index >= trips.size()) {
+    if (index < 0 || index >= static_cast<int>(trips.size())) {
         return nullptr;
     }
-    return trips[index];
-}
-
-Schedule::~Schedule() {
-    for (auto trip : trips) {
-        delete trip;
-    }
+    return trips[index].get();
 }
