@@ -2,10 +2,11 @@
 #define TRIP_H
 
 #include <string>
+#include <string_view>
 
 class Trip {
 public:
-    Trip(const std::string& route, const std::string& date, const std::string& departureTime, const std::string& arrivalTime)
+    Trip(std::string_view route, std::string_view date, std::string_view departureTime, std::string_view arrivalTime)
             : route(route), date(date), departureTime(departureTime), arrivalTime(arrivalTime) {}
 
     virtual ~Trip() = default;
@@ -15,12 +16,12 @@ public:
     std::string getDepartureTime() const { return departureTime; }
     std::string getArrivalTime() const { return arrivalTime; }
 
-    void setRoute(const std::string& newRoute) { route = newRoute; }
-    void setDate(const std::string& newDate) { date = newDate; }
-    void setDepartureTime(const std::string& newDepartureTime) { departureTime = newDepartureTime; }
-    void setArrivalTime(const std::string& newArrivalTime) { arrivalTime = newArrivalTime; }
+    void setRoute(std::string_view newRoute) { route = newRoute; }
+    void setDate(std::string_view newDate) { date = newDate; }
+    void setDepartureTime(std::string_view newDepartureTime) { departureTime = newDepartureTime; }
+    void setArrivalTime(std::string_view newArrivalTime) { arrivalTime = newArrivalTime; }
 
-protected:
+private:
     std::string route;
     std::string date;
     std::string departureTime;

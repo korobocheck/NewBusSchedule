@@ -34,6 +34,9 @@ public:
     // Move assignment operator
     Schedule& operator=(Schedule&& other) noexcept = default;
 
+    // Destructor
+    ~Schedule() = default;
+
     void addTrip(std::string_view route, std::string_view date, std::string_view departureTime, std::string_view arrivalTime);
     void listTrips() const;
     void updateTrip(int index, std::string_view newRoute, std::string_view newDate, std::string_view newDepartureTime, std::string_view newArrivalTime);
